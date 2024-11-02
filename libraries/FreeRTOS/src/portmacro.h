@@ -29,8 +29,6 @@
 #ifndef PORTMACRO_H
 #define PORTMACRO_H
 
-#include <avr/wdt.h>
-
 /* *INDENT-OFF* */
 #ifdef __cplusplus
     extern "C" {
@@ -46,6 +44,8 @@
  * These settings should not be altered.
  *-----------------------------------------------------------
  */
+
+#include <avr/wdt.h>
 
 /* Type definitions. */
 
