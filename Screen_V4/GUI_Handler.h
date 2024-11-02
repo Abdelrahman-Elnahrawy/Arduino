@@ -1,3 +1,4 @@
+
 #ifndef LCD_DISPLAY_H
 #define LCD_DISPLAY_H
 
@@ -25,7 +26,7 @@ void DisplayChangeSpeed(char command);
 void DisplayChangeAngle(char command);
 
 
-float GUIGetSpeed ();
+float GUIGetRPM ();
 float GUIGetAngle ();
 char GUIGetMode();
 

@@ -2,7 +2,7 @@
 #include "GUI_Handler.h"
 #include <LiquidCrystal.h>
 
-LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 char CurrentScreen   = MODE_SELECT;
 bool selectedControl = 1;
@@ -34,21 +34,21 @@ unsigned int readLCDButtons() {
   
     int button = BUTTON_NULL;
     // Check if any button is pressed (analog value less than 1000)
-    if (analogRead(0) < 1000) {
-        delay(70);  // Short delay for debouncing
+    if (analogRead(0) < 1020) {
+        delay(100);  // Short delay for debouncing
 
         int adcKeyIn = analogRead(0);  // Read the analog value again
 
         // Check for button presses based on analog values
-        if (adcKeyIn < 100) {
+        if (adcKeyIn < 50) {
             button = BUTTON_RIGHT;
-        } else if (adcKeyIn < 300) {
+        } else if (adcKeyIn < 200) {
             button = BUTTON_UP;
-        } else if (adcKeyIn < 500) {
+        } else if (adcKeyIn < 380) {
             button = BUTTON_DOWN;
-        } else if (adcKeyIn < 700) {
+        } else if (adcKeyIn < 600) {
             button = BUTTON_LEFT;
-        } else if (adcKeyIn < 900) {
+        } else if (adcKeyIn < 800) {
             button = BUTTON_SELECT;
         }
           int counter = 0;
@@ -350,7 +350,7 @@ void DisplayLockUpdate (){
         if(LockScreen){ LockScreen =0; lcd.cursor();    }
         else          { LockScreen =1; lcd.noCursor();  }
 }
-float GUIGetSpeed (){
+float GUIGetRPM (){
   Serial.print("\n the Current Speed is:");
   Serial.println(Speed);
   return Speed;

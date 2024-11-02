@@ -31,8 +31,8 @@
  */
 
 #include "Encoder.h"
-volatile uint16_t EncoderPhaseACounter = 0; // Counter for phase A transitions
-volatile uint16_t EncoderPhaseBCounter = 0; // Counter for phase B transitions
+volatile int EncoderPhaseACounter = 0; // Counter for phase A transitions
+volatile int EncoderPhaseBCounter = 0; // Counter for phase B transitions
 volatile uint32_t pulseTicksA = 0;          // Duration of pulses for phase A
 volatile uint32_t pulseTicksB = 0;          // Duration of pulses for phase B
 volatile uint32_t pulseTicksZ = 0;          // Duration of pulses for index signal (Z)
@@ -50,9 +50,9 @@ void EncoderInit() {
   pinMode(ENCODER_PINZ, INPUT_PULLUP);
 
   // Attach pin change interrupts for the encoder phases
-  attachPCINT(digitalPinToPCINT(ENCODER_PINA), EncoderPhaseA, RISING);
-  attachPCINT(digitalPinToPCINT(ENCODER_PINB), EncoderPhaseB, RISING);
-  attachPCINT(digitalPinToPCINT(ENCODER_PINZ), EncoderPhaseZ, RISING);
+  attachPCINT(digitalPinToPCINT(ENCODER_PINA), EncoderPhaseA, FALLING);
+  attachPCINT(digitalPinToPCINT(ENCODER_PINB), EncoderPhaseB, FALLING);
+  attachPCINT(digitalPinToPCINT(ENCODER_PINZ), EncoderPhaseZ, FALLING);
 
   // Set up Timer2 for pulse measurement
   TCCR2A = 0;                 // Configure Timer2 in normal mode
@@ -65,19 +65,35 @@ void EncoderPhaseA() {
   uint32_t currentTicks = (TimerOverflowCount << 8) + TCNT2;  // Calculate ticks with overflow handling
   pulseTicksA = currentTicks - lastTicksA;  // Calculate duration of pulse A
   lastTicksA = currentTicks;                  // Update last ticks for A
+  // Determine the rotation direction based on phase B state
+  EncoderRotationDirection = (digitalRead(ENCODER_PINB)) ? COUNTERCLOCKWISE : CLOCKWISE;
+
+  if(EncoderRotationDirection == CLOCKWISE){
   EncoderPhaseACounter++;                     // Increment phase A counter
+  } else{
+  EncoderPhaseACounter--;                     // Decrement phase A counter
+  }
+  
 }
 
 void EncoderPhaseB() {
   uint32_t currentTicks = (TimerOverflowCount << 8) + TCNT2;  // Calculate ticks with overflow handling
   pulseTicksB = currentTicks - lastTicksB;  // Calculate duration of pulse B
   lastTicksB = currentTicks;                  // Update last ticks for B
+
+  // Determine the rotation direction based on phase B state
+  EncoderRotationDirection = (digitalRead(ENCODER_PINA)) ? CLOCKWISE : COUNTERCLOCKWISE;
+
+
+    if(EncoderRotationDirection == CLOCKWISE){
   EncoderPhaseBCounter++;                     // Increment phase B counter
+  } else{
+  EncoderPhaseBCounter--;                     // Decrement phase B counter
+  }
+
 }
 
 void EncoderPhaseZ() {
-  // Determine the rotation direction based on phase B state
-  EncoderRotationDirection = (digitalRead(ENCODER_PINB)) ? COUNTERCLOCKWISE : CLOCKWISE;
   
   uint32_t currentTicks = (TimerOverflowCount << 8) + TCNT2;  // Calculate ticks with overflow handling
   pulseTicksZ = currentTicks - lastTicksZ;  // Calculate duration of pulse Z
@@ -97,8 +113,8 @@ float EncoderGetRPM() {
 
 float EncoderGetAngle() {
   // Calculate the angle based on phase A and B counts
-  return (((float)(EncoderPhaseACounter) * (360.0 / ENCODER_PPR)) + 
-          ((float)(EncoderPhaseBCounter) * (360.0 / ENCODER_PPR))) / 2.0;
+  return (((float)(abs(EncoderPhaseACounter)) * (360.0 / ENCODER_PPR)) + 
+          ((float)(abs(EncoderPhaseBCounter)) * (360.0 / ENCODER_PPR))) / 2.0;
 }
 
 bool EncoderGetDirection() {

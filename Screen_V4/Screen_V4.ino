@@ -7,6 +7,11 @@
 #define SCREEN_SPEED     1
 #define SCREEN_ANGLE     2
 uint8_t CurrentMode;
+uint32_t UpdateMillis;
+
+#define CORRECTION_PERIOD_FOR_SPEED_CONTROL   500 //in ms
+#define CORRECTION_PERIOD_FOR_ANGLE_CONTROL   500 //in ms
+
 void setup() {
   
   Serial.begin(115200);
@@ -18,28 +23,27 @@ void setup() {
 }
 
 void loop() {
-  /*
-  FreqGenGeneratePulses(100,100);
-  delay(2000);
-  */
-
   char buttonState = readLCDButtons(); // Read button state
   if (buttonState != BUTTON_NULL) {
-    DisplayUpdate(buttonState );
+    DisplayUpdate( buttonState );
     CurrentMode = GUIGetMode();
     bool RotationDirection = GUIGetDirection();
     StepperSetDirection(RotationDirection);
+
     switch (CurrentMode){
       case MODE_SELECT:
       StepperDisable  ();    
       break;
       case SPEED_CONTROL:
-      Serial.println("speed Control Update");
       StepperEnable  ();
-      StepperSetSpeed(GUIGetSpeed ());
+      Serial.println("speed Control Mode");
+      //StepperSetSpeed(GUIGetRPM ());
       break;
       case ANGLE_CONTROL:
       StepperEnable  ();
+      Serial.println("Angle Control Mode");
+      //StepperSetAngle(GUIGetAngle ());
+      /*
       if(RotationDirection == CLOCKWISE)
       {
         if(EncoderGetAngle()<GUIGetAngle ())
@@ -53,14 +57,26 @@ void loop() {
         StepperSetAngle(GUIGetAngle ());
         }
       }
-      
+      */
       break;
       default:
       break;
     }
   }
-  if(CurrentMode == ANGLE_CONTROL){
-
-  }
   
+  if(CurrentMode == ANGLE_CONTROL && ( (millis() - UpdateMillis ) > CORRECTION_PERIOD_FOR_ANGLE_CONTROL)  ){
+    UpdateMillis = millis();
+    if(EncoderGetAngle() < GUIGetAngle ()){
+      StepperSetAngle(EncoderGetAngle() - GUIGetAngle ());
+      }
+    else if(EncoderGetAngle() > GUIGetAngle ()){
+      StepperSetAngle(GUIGetAngle () - EncoderGetAngle());
+      }
+    else{}
+  }
+
+  if(CurrentMode == SPEED_CONTROL && ( (millis() - UpdateMillis ) > CORRECTION_PERIOD_FOR_SPEED_CONTROL)  ){
+    UpdateMillis = millis();
+    StepperSetSpeed(GUIGetRPM () + ( GUIGetRPM () - EncoderGetRPM())); 
+  }
 }

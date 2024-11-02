@@ -17,10 +17,10 @@ FreqGenPin11Init();
 }
 
 void StepperEnable  (){
-  digitalWrite(StepperEnablePin,HIGH);
+  digitalWrite(StepperEnablePin,LOW);
 }
 void StepperDisable(){
-  digitalWrite(StepperEnablePin,LOW);
+  digitalWrite(StepperEnablePin,HIGH);
   DisableFreqGenPin11();
 }
 void StepperSetDirection(bool direction){
@@ -40,5 +40,5 @@ void StepperSetSpeed(float speed){
 }
 
 void StepperSetAngle(float angle){
-  FreqGenGeneratePulses((int)((angle * 300) /360), StepsPerSecond);
+  FreqGenGeneratePulses((int)((angle * 300) /360), 100);
 }
