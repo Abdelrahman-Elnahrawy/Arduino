@@ -53,6 +53,8 @@ void EncoderInit() {
   attachPCINT(digitalPinToPCINT(ENCODER_PINB), EncoderPhaseB, FALLING);
   attachPCINT(digitalPinToPCINT(ENCODER_PINZ), EncoderPhaseZ, FALLING);
 
+
+
 /*
   TCCR2A  = 0;                // Configure Timer2 in normal mode
   TCCR2B  = 0;                // Set entire TCCR2B register to 0
@@ -63,7 +65,7 @@ void EncoderInit() {
 
 
 
-  sei();
+  sei(); // enable global interrupts
 
 }
 
