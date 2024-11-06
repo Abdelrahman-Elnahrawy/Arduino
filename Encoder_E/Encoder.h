@@ -9,6 +9,7 @@
 #define ENCODER_PINZ  A3   // A3
 #define ENCODER_PPR   1500  // Pulses per revolution for the encoder
 
+#define ENCODER_TIMER_FREQ 1000000
 #ifndef COUNTERCLOCKWISE 
 #define COUNTERCLOCKWISE 1
 #endif
@@ -17,8 +18,8 @@
 #define CLOCKWISE 0
 #endif
 
-#define TICKS_TO_MS(ticks) ((ticks) / 2000.0)
-#define TICKS_TO_US(ticks) ((ticks) / 2)
+//#define TICKS_TO_MS(ticks) ((ticks) / 2000.0)
+//#define TICKS_TO_US(ticks) ((ticks) / 2)
 
 
 void EncoderInit();

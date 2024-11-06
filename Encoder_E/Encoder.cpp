@@ -1,5 +1,4 @@
 
-
 /**
  * @file Encoder.cpp
  * @brief This file contains the implementation for handling rotary encoder inputs.
@@ -31,17 +30,17 @@
  */
 
 #include "Encoder.h"
-volatile int EncoderPhaseACounter = 0; // Counter for phase A transitions
-volatile int EncoderPhaseBCounter = 0; // Counter for phase B transitions
+volatile uint16_t EncoderPhaseACounter = 0; // Counter for phase A transitions
+volatile uint16_t EncoderPhaseBCounter = 0; // Counter for phase B transitions
 volatile uint32_t pulseTicksA = 0;          // Duration of pulses for phase A
 volatile uint32_t pulseTicksB = 0;          // Duration of pulses for phase B
 volatile uint32_t pulseTicksZ = 0;          // Duration of pulses for index signal (Z)
 
 volatile uint8_t TimerOverflowCount = 0;    // To handle overflow for timing accuracy
-volatile uint32_t lastTicksA = 0;            // Last recorded ticks for phase A
-volatile uint32_t lastTicksB = 0;            // Last recorded ticks for phase B
-volatile uint32_t lastTicksZ = 0;            // Last recorded ticks for index signal (Z)
-uint8_t EncoderRotationDirection;             // Direction of rotation (CLOCKWISE or COUNTERCLOCKWISE)
+volatile uint32_t lastTicksA = 0;           // Last recorded ticks for phase A
+volatile uint32_t lastTicksB = 0;           // Last recorded ticks for phase B
+volatile uint32_t lastTicksZ = 0;           // Last recorded ticks for index signal (Z)
+uint8_t EncoderRotationDirection;           // Direction of rotation (CLOCKWISE or COUNTERCLOCKWISE)
 
 void EncoderInit() {
   // Set encoder pins as input with pull-up resistors
@@ -53,33 +52,28 @@ void EncoderInit() {
   attachPCINT(digitalPinToPCINT(ENCODER_PINB), EncoderPhaseB, FALLING);
   attachPCINT(digitalPinToPCINT(ENCODER_PINZ), EncoderPhaseZ, FALLING);
 
-
-
-/*
-  TCCR2A  = 0;                // Configure Timer2 in normal mode
-  TCCR2B  = 0;                // Set entire TCCR2B register to 0
-  TCCR2B |= (1 << CS21);      // Set prescaler to 8 for Timer2
-  TCNT1   = 0;                // Start with Timer2 count of 0
-  TIMSK2  = (1 << TOIE2);     // Enable Timer2 overflow interrupt
-*/
-
-
-
+  // timer configurations
+  TCCR1A = 0;                // Configure Timer1 in normal mode (WGM10 and WGM11 bits are 0)
+  TCCR1B = 0;                // Set entire TCCR1B register to 0
+  TCCR1B |= (1 << CS11);     // Set prescaler to 8 for Timer1 (CS11 = 1, CS10 and CS12 = 0)
+  TCNT1 = 0;                 // Start with Timer1 count of 0
+  TIMSK1 = (1 << TOIE1);     // Enable Timer1 overflow interrupt
   sei(); // enable global interrupts
 
 }
 
 void EncoderPhaseA() {
   uint32_t currentTicks = (TimerOverflowCount << 16) + TCNT1;  // Calculate ticks with overflow handling for 16-bit Timer1
-  pulseTicksA = currentTicks - lastTicksA;  // Calculate duration of pulse A
-  lastTicksA = currentTicks;                  // Update last ticks for A
+  pulseTicksA = currentTicks - lastTicksA;                     // Calculate duration of pulse A
+  lastTicksA = currentTicks;                                   // Update last ticks for A
   // Determine the rotation direction based on phase B state
   EncoderRotationDirection = (digitalRead(ENCODER_PINB)) ? COUNTERCLOCKWISE : CLOCKWISE;
 
   if(EncoderRotationDirection == CLOCKWISE){
-  EncoderPhaseACounter++;                     // Increment phase A counter
-  } else{
-  EncoderPhaseACounter--;                     // Decrement phase A counter
+    EncoderPhaseACounter++;                     // Increment phase A counter
+  } else {
+    if(EncoderPhaseACounter == 0){EncoderPhaseACounter = 360}
+    EncoderPhaseACounter--;                     // Decrement phase A counter
   }
 }
 
@@ -91,10 +85,10 @@ void EncoderPhaseB() {
   // Determine the rotation direction based on phase B state
   EncoderRotationDirection = (digitalRead(ENCODER_PINA)) ? CLOCKWISE : COUNTERCLOCKWISE;
 
-
   if(EncoderRotationDirection == CLOCKWISE){
     EncoderPhaseBCounter++;                     // Increment phase B counter
-  } else{
+  } else{ 
+    if(EncoderPhaseBCounter == 0){EncoderPhaseBCounter = 360}
     EncoderPhaseBCounter--;                     // Decrement phase B counter
   }
 }
@@ -114,13 +108,13 @@ void EncoderPhaseZ() {
 
 float EncoderGetRPM() {
   // Calculate RPM based on pulseTicksZ duration
-  return 1000000 / (TICKS_TO_US(pulseTicksZ)); // Frequency = 1 / Period (in microseconds)
+  return (ENCODER_TIMER_FREQ / pulseTicksZ) * 60; // Frequency (RPS) * 60 = RPM
 }
 
 float EncoderGetAngle() {
   // Calculate the angle based on phase A and B counts
-  return (((float)(abs(EncoderPhaseACounter)) * (360.0 / ENCODER_PPR)) + 
-          ((float)(abs(EncoderPhaseBCounter)) * (360.0 / ENCODER_PPR))) / 2.0;
+  return (((float)(EncoderPhaseACounter) * (360.0 / ENCODER_PPR)) + 
+          ((float)(EncoderPhaseBCounter) * (360.0 / ENCODER_PPR))) / 2.0;
 }
 
 bool EncoderGetDirection() {
