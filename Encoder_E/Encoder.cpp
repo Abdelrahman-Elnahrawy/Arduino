@@ -59,7 +59,7 @@ void EncoderInit() {
   TCCR2A  = 0;                // Configure Timer2 in normal mode
   TCCR2B  = 0;                // Set entire TCCR2B register to 0
   TCCR2B |= (1 << CS21);      // Set prescaler to 8 for Timer2
-  TCNT2   = 0;                // Start with Timer2 count of 0
+  TCNT1   = 0;                // Start with Timer2 count of 0
   TIMSK2  = (1 << TOIE2);     // Enable Timer2 overflow interrupt
 */
 
@@ -70,7 +70,7 @@ void EncoderInit() {
 }
 
 void EncoderPhaseA() {
-  uint32_t currentTicks = (TimerOverflowCount << 8) + TCNT2;  // Calculate ticks with overflow handling
+  uint32_t currentTicks = (TimerOverflowCount << 16) + TCNT1;  // Calculate ticks with overflow handling for 16-bit Timer1
   pulseTicksA = currentTicks - lastTicksA;  // Calculate duration of pulse A
   lastTicksA = currentTicks;                  // Update last ticks for A
   // Determine the rotation direction based on phase B state
@@ -84,7 +84,7 @@ void EncoderPhaseA() {
 }
 
 void EncoderPhaseB() {
-  uint32_t currentTicks = (TimerOverflowCount << 8) + TCNT2;  // Calculate ticks with overflow handling
+  uint32_t currentTicks = (TimerOverflowCount << 16) + TCNT1;  // Calculate ticks with overflow handling
   pulseTicksB = currentTicks - lastTicksB;  // Calculate duration of pulse B
   lastTicksB = currentTicks;                  // Update last ticks for B
 
@@ -101,7 +101,7 @@ void EncoderPhaseB() {
 
 void EncoderPhaseZ() {
   
-  uint32_t currentTicks = (TimerOverflowCount << 8) + TCNT2;  // Calculate ticks with overflow handling
+  uint32_t currentTicks = (TimerOverflowCount << 16) + TCNT1;  // Calculate ticks with overflow handling
   pulseTicksZ = currentTicks - lastTicksZ;  // Calculate duration of pulse Z
   lastTicksZ = currentTicks;                  // Update last ticks for Z
   
@@ -109,7 +109,7 @@ void EncoderPhaseZ() {
   EncoderPhaseACounter = 0; 
   EncoderPhaseBCounter = 0; 
   TimerOverflowCount = 0;  // Reset overflow count
-  TCNT2 = 0;               // Reset Timer2 count
+  TCNT1 = 0;               // Reset Timer2 count
 }
 
 float EncoderGetRPM() {
