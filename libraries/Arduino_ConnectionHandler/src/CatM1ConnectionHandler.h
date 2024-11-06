@@ -1,10 +1,13 @@
 /*
    This file is part of ArduinoIoTCloud.
-   Copyright 2020 ARDUINO SA (http://www.arduino.cc/)
+
+   Copyright 2019 ARDUINO SA (http://www.arduino.cc/)
+
    This software is released under the GNU General Public License version 3,
    which covers the main part of arduino-cli.
    The terms of this license can be found at:
    https://www.gnu.org/licenses/gpl-3.0.en.html
+
    You can be released from the requirements of the above licenses by purchasing
    a commercial license. Buying such a license is mandatory if you want to modify or
    otherwise use the software for commercial activities involving the Arduino
@@ -12,33 +15,37 @@
    a commercial license, send an email to license@arduino.cc.
 */
 
-#ifndef ARDUINO_ETHERNET_CONNECTION_HANDLER_H_
-#define ARDUINO_ETHERNET_CONNECTION_HANDLER_H_
+#ifndef ARDUINO_CATM1_CONNECTION_HANDLER_H_
+#define ARDUINO_CATM1_CONNECTION_HANDLER_H_
 
 /******************************************************************************
    INCLUDE
  ******************************************************************************/
 
-#include "Arduino_ConnectionHandler.h"
+#include "ConnectionHandlerInterface.h"
 
-#ifdef BOARD_HAS_ETHERNET /* Only compile if the board has ethernet */
+#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_EDGE_CONTROL)
+  #include <GSM.h>
+#endif
+
+#ifndef BOARD_HAS_CATM1_NBIOT
+  #error "Board doesn't support CATM1_NBIOT"
+#endif
 
 /******************************************************************************
    CLASS DECLARATION
  ******************************************************************************/
 
-class EthernetConnectionHandler : public ConnectionHandler
+class CatM1ConnectionHandler : public ConnectionHandler
 {
   public:
 
-    EthernetConnectionHandler(bool const keep_alive = true);
-    EthernetConnectionHandler(const IPAddress ip, const IPAddress dns, const IPAddress gateway, const IPAddress netmask, bool const keep_alive = true);
-    EthernetConnectionHandler(const char * ip, const char * dns, const char * gateway, const char * netmask, bool const keep_alive = true);
+    CatM1ConnectionHandler(const char * pin, const char * apn, const char * login, const char * pass, RadioAccessTechnologyType rat = CATM1, uint32_t band = BAND_3 | BAND_20 | BAND_19, bool const keep_alive = true);
 
 
-    virtual unsigned long getTime() override { return 0; }
-    virtual Client & getClient() override{ return _eth_client; }
-    virtual UDP & getUDP() override { return _eth_udp; }
+    virtual unsigned long getTime() override;
+    virtual Client & getClient() override { return _gsm_client; };
+    virtual UDP & getUDP() override { return _gsm_udp; };
 
 
   protected:
@@ -49,18 +56,19 @@ class EthernetConnectionHandler : public ConnectionHandler
     virtual NetworkConnectionState update_handleDisconnecting() override;
     virtual NetworkConnectionState update_handleDisconnected () override;
 
+
   private:
 
-    IPAddress _ip;
-    IPAddress _dns;
-    IPAddress _gateway;
-    IPAddress _netmask;
+    const char * _pin;
+    const char * _apn;
+    const char * _login;
+    const char * _pass;
 
-    EthernetUDP _eth_udp;
-    EthernetClient _eth_client;
+    RadioAccessTechnologyType _rat;
+    uint32_t _band;
 
+    GSMUDP _gsm_udp;
+    GSMClient _gsm_client;
 };
 
-#endif /* #ifdef BOARD_HAS_ETHERNET */
-
-#endif /* ARDUINO_ETHERNET_CONNECTION_HANDLER_H_ */
+#endif /* #ifndef ARDUINO_CATM1_CONNECTION_HANDLER_H_ */

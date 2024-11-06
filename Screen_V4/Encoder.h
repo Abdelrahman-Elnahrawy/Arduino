@@ -4,9 +4,9 @@
 
 #include "PinChangeInterrupt.h"
 
-#define ENCODER_PINA  2   // PCINT0
-#define ENCODER_PINB  3   // PCINT1
-#define ENCODER_PINZ  10  // PCINT2
+#define ENCODER_PINA  20   // A1
+#define ENCODER_PINB  21   // A2
+#define ENCODER_PINZ  22   // A3
 #define ENCODER_PPR   300 // Pulses per revolution for the encoder
 
 #ifndef COUNTERCLOCKWISE 
