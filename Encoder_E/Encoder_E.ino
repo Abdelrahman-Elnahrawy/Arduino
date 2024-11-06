@@ -3,6 +3,8 @@
 #include "Encoder.h"
 #include "FreqGenPin11.h"
 // Control modes
+
+
 #define SCREEN_SELECTION 0
 #define SCREEN_SPEED     1
 #define SCREEN_ANGLE     2
@@ -25,7 +27,7 @@ void setup() {
 }
 
 void loop() {
-delay(1000);
+delay(500);
 Serial.print("Current Angle = ");
-Serial.print(EncoderGetAngle());
+Serial.println(EncoderGetAngle());
 }

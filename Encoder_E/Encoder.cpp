@@ -48,17 +48,23 @@ void EncoderInit() {
   pinMode(ENCODER_PINA, INPUT_PULLUP);
   pinMode(ENCODER_PINB, INPUT_PULLUP);
   pinMode(ENCODER_PINZ, INPUT_PULLUP);
-
-  // Attach pin change interrupts for the encoder phases
+    // Attach pin change interrupts for the encoder phases
   attachPCINT(digitalPinToPCINT(ENCODER_PINA), EncoderPhaseA, FALLING);
   attachPCINT(digitalPinToPCINT(ENCODER_PINB), EncoderPhaseB, FALLING);
   attachPCINT(digitalPinToPCINT(ENCODER_PINZ), EncoderPhaseZ, FALLING);
 
-  // Set up Timer2 for pulse measurement
-  TCCR2A = 0;                 // Configure Timer2 in normal mode
-  TCCR2B = (1 << CS21);      // Set prescaler to 8 for Timer2
-  TCNT2 = 0;                  // Start with Timer2 count of 0
-  TIMSK2 = (1 << TOIE2);     // Enable Timer2 overflow interrupt
+/*
+  TCCR2A  = 0;                // Configure Timer2 in normal mode
+  TCCR2B  = 0;                // Set entire TCCR2B register to 0
+  TCCR2B |= (1 << CS21);      // Set prescaler to 8 for Timer2
+  TCNT2   = 0;                // Start with Timer2 count of 0
+  TIMSK2  = (1 << TOIE2);     // Enable Timer2 overflow interrupt
+*/
+
+
+
+  sei();
+
 }
 
 void EncoderPhaseA() {
@@ -73,7 +79,6 @@ void EncoderPhaseA() {
   } else{
   EncoderPhaseACounter--;                     // Decrement phase A counter
   }
-  
 }
 
 void EncoderPhaseB() {
@@ -85,12 +90,11 @@ void EncoderPhaseB() {
   EncoderRotationDirection = (digitalRead(ENCODER_PINA)) ? CLOCKWISE : COUNTERCLOCKWISE;
 
 
-    if(EncoderRotationDirection == CLOCKWISE){
-  EncoderPhaseBCounter++;                     // Increment phase B counter
+  if(EncoderRotationDirection == CLOCKWISE){
+    EncoderPhaseBCounter++;                     // Increment phase B counter
   } else{
-  EncoderPhaseBCounter--;                     // Decrement phase B counter
+    EncoderPhaseBCounter--;                     // Decrement phase B counter
   }
-
 }
 
 void EncoderPhaseZ() {
