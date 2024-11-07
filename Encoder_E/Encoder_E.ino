@@ -30,4 +30,22 @@ void loop() {
 delay(500);
 Serial.print("Current Angle = ");
 Serial.println(EncoderGetAngle());
+
+Serial.print("EncoderPhaseACounter = ");
+Serial.println(EncoderGet_EncoderPhaseACounter());
+
+Serial.print("EncoderPhaseBCounter = ");
+Serial.println(EncoderGet_EncoderPhaseBCounter());
+
+Serial.print("time in ms ");
+Serial.println((EncoderGet_Clock()/1000));
+
+Serial.print("rotation direction is ");
+if(EncoderGetDirection() == CLOCKWISE){
+  Serial.println("CLOCKWISE");
+}
+else{
+  Serial.println("Counter CLOCKWISE");
+}
+EncoderGetDirection();
 }

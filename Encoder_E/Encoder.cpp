@@ -36,7 +36,7 @@ volatile uint32_t pulseTicksA = 0;          // Duration of pulses for phase A
 volatile uint32_t pulseTicksB = 0;          // Duration of pulses for phase B
 volatile uint32_t pulseTicksZ = 0;          // Duration of pulses for index signal (Z)
 
-volatile uint8_t TimerOverflowCount = 0;    // To handle overflow for timing accuracy
+volatile uint16_t TimerOverflowCount = 0;    // To handle overflow for timing accuracy
 volatile uint32_t lastTicksA = 0;           // Last recorded ticks for phase A
 volatile uint32_t lastTicksB = 0;           // Last recorded ticks for phase B
 volatile uint32_t lastTicksZ = 0;           // Last recorded ticks for index signal (Z)
@@ -51,14 +51,14 @@ void EncoderInit() {
   attachPCINT(digitalPinToPCINT(ENCODER_PINA), EncoderPhaseA, FALLING);
   attachPCINT(digitalPinToPCINT(ENCODER_PINB), EncoderPhaseB, FALLING);
   attachPCINT(digitalPinToPCINT(ENCODER_PINZ), EncoderPhaseZ, FALLING);
-/*
+
   // timer configurations
   TCCR1A = 0;                // Configure Timer1 in normal mode (WGM10 and WGM11 bits are 0)
   TCCR1B = 0;                // Set entire TCCR1B register to 0
   TCCR1B |= (1 << CS11);     // Set prescaler to 8 for Timer1 (CS11 = 1, CS10 and CS12 = 0)
   TCNT1 = 0;                 // Start with Timer1 count of 0
   TIMSK1 = (1 << TOIE1);     // Enable Timer1 overflow interrupt
-  */
+  
   sei(); // enable global interrupts
 
 }
@@ -73,7 +73,7 @@ void EncoderPhaseA() {
   if(EncoderRotationDirection == CLOCKWISE){
     EncoderPhaseACounter++;                     // Increment phase A counter
   } else {
-    if(EncoderPhaseACounter == 0){EncoderPhaseACounter = 360;}
+    if(EncoderPhaseACounter == 0){EncoderPhaseACounter = 1500;}
     EncoderPhaseACounter--;                     // Decrement phase A counter
   }
 }
@@ -89,7 +89,7 @@ void EncoderPhaseB() {
   if(EncoderRotationDirection == CLOCKWISE){
     EncoderPhaseBCounter++;                     // Increment phase B counter
   } else{ 
-    if(EncoderPhaseBCounter == 0){EncoderPhaseBCounter = 360;}
+    if(EncoderPhaseBCounter == 0){EncoderPhaseBCounter = 1500;}
     EncoderPhaseBCounter--;                     // Decrement phase B counter
   }
 }
@@ -123,7 +123,20 @@ bool EncoderGetDirection() {
   return EncoderRotationDirection;
 }
 
-// Timer2 overflow interrupt service routine
-ISR(TicksR2_OVF_vect) {
+
+uint16_t EncoderGet_EncoderPhaseACounter(){
+  return EncoderPhaseACounter;
+}
+uint16_t EncoderGet_EncoderPhaseBCounter(){
+  return EncoderPhaseBCounter;
+}
+
+uint32_t EncoderGet_Clock(){
+  return (((uint32_t)TICKS_TO_US(TimerOverflowCount) << 16) + TICKS_TO_US(TCNT1) ) ;
+}
+
+
+// Timer1 overflow interrupt service routine
+ISR(TIMER1_OVF_vect) {
   TimerOverflowCount++;  // Increment overflow count on each overflow
 }
