@@ -51,13 +51,14 @@ void EncoderInit() {
   attachPCINT(digitalPinToPCINT(ENCODER_PINA), EncoderPhaseA, FALLING);
   attachPCINT(digitalPinToPCINT(ENCODER_PINB), EncoderPhaseB, FALLING);
   attachPCINT(digitalPinToPCINT(ENCODER_PINZ), EncoderPhaseZ, FALLING);
-
+/*
   // timer configurations
   TCCR1A = 0;                // Configure Timer1 in normal mode (WGM10 and WGM11 bits are 0)
   TCCR1B = 0;                // Set entire TCCR1B register to 0
   TCCR1B |= (1 << CS11);     // Set prescaler to 8 for Timer1 (CS11 = 1, CS10 and CS12 = 0)
   TCNT1 = 0;                 // Start with Timer1 count of 0
   TIMSK1 = (1 << TOIE1);     // Enable Timer1 overflow interrupt
+  */
   sei(); // enable global interrupts
 
 }
@@ -72,7 +73,7 @@ void EncoderPhaseA() {
   if(EncoderRotationDirection == CLOCKWISE){
     EncoderPhaseACounter++;                     // Increment phase A counter
   } else {
-    if(EncoderPhaseACounter == 0){EncoderPhaseACounter = 360}
+    if(EncoderPhaseACounter == 0){EncoderPhaseACounter = 360;}
     EncoderPhaseACounter--;                     // Decrement phase A counter
   }
 }
@@ -88,7 +89,7 @@ void EncoderPhaseB() {
   if(EncoderRotationDirection == CLOCKWISE){
     EncoderPhaseBCounter++;                     // Increment phase B counter
   } else{ 
-    if(EncoderPhaseBCounter == 0){EncoderPhaseBCounter = 360}
+    if(EncoderPhaseBCounter == 0){EncoderPhaseBCounter = 360;}
     EncoderPhaseBCounter--;                     // Decrement phase B counter
   }
 }
