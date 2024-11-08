@@ -19,7 +19,8 @@
 
 #define TICKS_TO_MS(ticks) ((ticks) / 2000.0)
 #define TICKS_TO_US(ticks) ((ticks) / 2)
-
+#define MS_TO_TICKS(ticks) ((ticks) * 2000.0)
+#define US_TO_TICKS(ticks) ((ticks) * 2)
 
 void EncoderInit();
 

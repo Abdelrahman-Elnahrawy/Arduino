@@ -32,14 +32,17 @@
 #include "Encoder.h"
 volatile uint16_t EncoderPhaseACounter = 0; // Counter for phase A transitions
 volatile uint16_t EncoderPhaseBCounter = 0; // Counter for phase B transitions
-volatile uint32_t pulseTicksA = 0;          // Duration of pulses for phase A
-volatile uint32_t pulseTicksB = 0;          // Duration of pulses for phase B
-volatile uint32_t pulseTicksZ = 0;          // Duration of pulses for index signal (Z)
+volatile uint32_t pulseTicksA = 4000000000;          // Duration of pulses for phase A
+volatile uint32_t pulseTicksB = 4000000000;          // Duration of pulses for phase B
+volatile uint32_t pulseTicksZ = 4294967295;          // Duration of pulses for index signal (Z)
 
 volatile uint16_t TimerOverflowCount = 0;    // To handle overflow for timing accuracy
 volatile uint32_t lastTicksA = 0;           // Last recorded ticks for phase A
 volatile uint32_t lastTicksB = 0;           // Last recorded ticks for phase B
 volatile uint32_t lastTicksZ = 0;           // Last recorded ticks for index signal (Z)
+uint8_t TicksATimeCounter;
+uint8_t TicksBTimeCounter;
+
 uint8_t EncoderRotationDirection;           // Direction of rotation (CLOCKWISE or COUNTERCLOCKWISE)
 
 void EncoderInit() {
@@ -64,9 +67,17 @@ void EncoderInit() {
 }
 
 void EncoderPhaseA() {
-  uint32_t currentTicks = (TimerOverflowCount << 16) + TCNT1;  // Calculate ticks with overflow handling for 16-bit Timer1
-  pulseTicksA = currentTicks - lastTicksA;                     // Calculate duration of pulse A
-  lastTicksA = currentTicks;                                   // Update last ticks for A
+  uint32_t currentTicksA = (((uint32_t)TimerOverflowCount << 16) + TCNT1 );   // Calculate ticks with overflow handling for 16-bit Timer1
+  if((currentTicksA - lastTicksA )> US_TO_TICKS(4)) // if a z pulse detected IN LESS TAN 66 MS (MOTOR SPEED IS ABOVE 1000 RPM ) ignore the result as its a noise
+  {
+    if(TicksATimeCounter > 99 ){
+    TicksATimeCounter = 0 ;
+  pulseTicksA = currentTicksA - lastTicksA;                     // Calculate duration of pulse A
+  lastTicksA = currentTicksA;                                   // Update last ticks for A
+    }else{
+      TicksATimeCounter++;
+    }
+
   // Determine the rotation direction based on phase B state
   EncoderRotationDirection = (digitalRead(ENCODER_PINB)) ? COUNTERCLOCKWISE : CLOCKWISE;
 
@@ -77,12 +88,18 @@ void EncoderPhaseA() {
     EncoderPhaseACounter--;                     // Decrement phase A counter
   }
 }
-
+}
 void EncoderPhaseB() {
-  uint32_t currentTicks = (TimerOverflowCount << 16) + TCNT1;  // Calculate ticks with overflow handling
-  pulseTicksB = currentTicks - lastTicksB;  // Calculate duration of pulse B
-  lastTicksB = currentTicks;                  // Update last ticks for B
-
+  uint32_t currentTicksB = (((uint32_t)TimerOverflowCount << 16) + TCNT1 );   // Calculate ticks with overflow handling
+    if((currentTicksB - lastTicksB )> US_TO_TICKS(4)) // if a z pulse detected IN LESS TAN 66 MS (MOTOR SPEED IS ABOVE 1000 RPM ) ignore the result as its a noise
+  {
+    if(TicksBTimeCounter > 99 ){
+    TicksBTimeCounter = 0 ;
+  pulseTicksB = currentTicksB - lastTicksB;  // Calculate duration of pulse B
+  lastTicksB = currentTicksB;                  // Update last ticks for B
+    } else{
+      TicksBTimeCounter++;
+    }
   // Determine the rotation direction based on phase B state
   EncoderRotationDirection = (digitalRead(ENCODER_PINA)) ? CLOCKWISE : COUNTERCLOCKWISE;
 
@@ -93,23 +110,30 @@ void EncoderPhaseB() {
     EncoderPhaseBCounter--;                     // Decrement phase B counter
   }
 }
+}
 
 void EncoderPhaseZ() {
   
-  uint32_t currentTicks = (TimerOverflowCount << 16) + TCNT1;  // Calculate ticks with overflow handling
-  pulseTicksZ = currentTicks - lastTicksZ;  // Calculate duration of pulse Z
-  lastTicksZ = currentTicks;                  // Update last ticks for Z
-  
+  uint32_t currentTicksZ = (((uint32_t)TimerOverflowCount << 16) + TCNT1 );  // Calculate ticks with overflow handling
+  if((currentTicksZ - lastTicksZ )> MS_TO_TICKS(6)) // if a z pulse detected IN LESS TAN 66 MS (MOTOR SPEED IS ABOVE 1000 RPM ) ignore the result as its a noise
+  {
+  pulseTicksZ = currentTicksZ - lastTicksZ;  // Calculate duration of pulse Z
+  lastTicksZ = currentTicksZ;                  // Update last ticks for Z
+
+  //Serial.print("z pulse duration IN US :");
+  //Serial.println(TICKS_TO_US(pulseTicksZ));
   // Reset counters and overflow count on Z signal
   EncoderPhaseACounter = 0; 
   EncoderPhaseBCounter = 0; 
-  TimerOverflowCount = 0;  // Reset overflow count
-  TCNT1 = 0;               // Reset Timer2 count
+}
 }
 
 float EncoderGetRPM() {
   // Calculate RPM based on pulseTicksZ duration
-  return (ENCODER_TIMER_FREQ / pulseTicksZ) * 60; // Frequency (RPS) * 60 = RPM
+  #define NOSA  (ENCODER_PPR/100)
+  return ((float)1000000 / TICKS_TO_US(pulseTicksB * 15)) * 60; // Frequency (RPS) * 60 = RPM
+
+ // return (((float)1000000 / TICKS_TO_US(pulseTicksZ)) + ((float)1000000 / TICKS_TO_US(pulseTicksA* ENCODER_PPR)) + ((float)1000000 / TICKS_TO_US(pulseTicksB* ENCODER_PPR)) ) * 20; // Frequency (RPS) * 60 = RPM
 }
 
 float EncoderGetAngle() {

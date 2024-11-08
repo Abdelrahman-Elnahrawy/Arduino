@@ -31,14 +31,14 @@ void StepperSetSpeed(float speed){
   if(speed == 0){
    DisableFreqGenPin11();
   }
-  Serial.print("\n the Current Speed given to stepper is:");
-  Serial.println(speed);
-  StepsPerSecond =((speed * STEPS_PER_REVOLUTION)/60);
-  Serial.print("\n the number if steps per second is:");
-  Serial.println(StepsPerSecond);
+ // Serial.print("\n the Current Speed given to stepper is:");
+  //Serial.println(speed);
+  StepsPerSecond =((speed *2* STEPS_PER_REVOLUTION)/60);
+ // Serial.print("\n the number if steps per second is:");
+  //Serial.println(StepsPerSecond);
   setFreqPin11(StepsPerSecond);  //the speed is in rpm .. to get the revolution per second = speed / 60 ,,, and to get the amount of steps required
 }
 
 void StepperSetAngle(float angle){
-  FreqGenGeneratePulses((int)((angle * 300) /360), 100);
+  FreqGenGeneratePulses((int)((angle * 300) /360), 60);
 }

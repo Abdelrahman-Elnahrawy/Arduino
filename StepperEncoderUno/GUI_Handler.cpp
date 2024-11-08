@@ -351,12 +351,15 @@ void DisplayLockUpdate (){
         else          { LockScreen =1; lcd.noCursor();  }
 }
 float GUIGetRPM (){
-  Serial.print("\n the Current Speed is:");
-  Serial.println(Speed);
   return Speed;
 }
 float GUIGetAngle (){
+  if (Angle == 0){
+    return 360;
+  }
+  else{
   return Angle;
+  }
 }
 char GUIGetMode(){
   return CurrentScreen;

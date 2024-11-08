@@ -14,6 +14,17 @@ uint32_t UpdateMillis;
 #define CORRECTION_PERIOD_FOR_SPEED_CONTROL   500 //in ms
 #define CORRECTION_PERIOD_FOR_ANGLE_CONTROL   500 //in ms
 
+
+// PID Control Variables
+static float rpmIntegral = 0;        // Accumulated RPM error (integral term)
+static float previousRPMError = 0;   // Previous RPM error for derivative calculation
+
+// PID Gains (Tuning Parameters)
+float rpmKp = 0.1; // Proportional gain for RPM control
+float rpmKi = 0.05; // Integral gain for RPM control
+float rpmKd = 0.01; // Derivative gain for RPM control
+
+
 void setup() {
   
   Serial.begin(115200);
