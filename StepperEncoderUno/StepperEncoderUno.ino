@@ -2,13 +2,13 @@
 #include "Stepper_Handler.h"
 #include "Encoder.h"
 #include "FreqGenPin11.h"
-// Control modes
-#define SCREEN_SELECTION 0
-#define SCREEN_SPEED     1
-#define SCREEN_ANGLE     2
+
+
+#define STEP_ANGLE       1.8  
+#define GEAR_RATIO       1
 uint8_t CurrentMode;
 uint32_t UpdateMillis;
-uint16_t MoveAngle;
+float MoveAngle;
 float CurrentSpeedFactor = 1;
 
 
@@ -83,6 +83,7 @@ void loop() {
 
   if(CurrentMode == ANGLE_CONTROL && ( (millis() - UpdateMillis ) > CORRECTION_PERIOD_FOR_ANGLE_CONTROL)  ){
     UpdateMillis = millis();
+    if(abs(MoveAngle  - EncoderGetAngle())>3.6){
   Serial.print("current angle is :");
   Serial.print(EncoderGetAngle());
   Serial.print("  MoveAngle is:");
@@ -90,7 +91,14 @@ void loop() {
   Serial.print("  Stepper Set Angle is:");
   Serial.println(abs((MoveAngle  - EncoderGetAngle())/2));
   StepperSetAngle(abs((MoveAngle  - EncoderGetAngle())/2));
-  
+  }
+  else if (abs(MoveAngle  - EncoderGetAngle())>STEP_ANGLE){
+    StepperSetAngle( abs( ( MoveAngle  - EncoderGetAngle() ) ) );
+
+  }
+
+
+
   }
 
 
