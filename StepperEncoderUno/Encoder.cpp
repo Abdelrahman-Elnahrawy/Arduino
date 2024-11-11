@@ -138,8 +138,14 @@ float EncoderGetRPM() {
 
 float EncoderGetAngle() {
   // Calculate the angle based on phase A and B counts
+
+  if ( EncoderPhaseACounter > ENCODER_PPR){ EncoderPhaseACounter-= ENCODER_PPR;}
+  if ( EncoderPhaseBCounter > ENCODER_PPR){ EncoderPhaseBCounter-= ENCODER_PPR;}
+
+  
   return (((float)(EncoderPhaseACounter) * (360.0 / ENCODER_PPR)) + 
           ((float)(EncoderPhaseBCounter) * (360.0 / ENCODER_PPR))) / 2.0;
+
 }
 
 bool EncoderGetDirection() {

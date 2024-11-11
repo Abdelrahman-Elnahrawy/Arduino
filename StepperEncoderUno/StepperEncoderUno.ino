@@ -4,8 +4,9 @@
 #include "FreqGenPin11.h"
 
 
-#define STEP_ANGLE       1.8  
+
 #define GEAR_RATIO       1
+#define SET_ANGLE_SPEED  200
 uint8_t CurrentMode;
 uint32_t UpdateMillis;
 float MoveAngle;
@@ -17,12 +18,12 @@ static float rpmIntegral = 0;        // Accumulated RPM error (integral term)
 static float previousRPMError = 0;   // Previous RPM error for derivative calculation
 
 // PID Gains (Tuning Parameters)
-float rpmKp = 0.2; // Proportional gain for RPM control
+float rpmKp = 0.2;  // Proportional gain for RPM control
 float rpmKi = 0.05; // Integral gain for RPM control
 float rpmKd = 0.32; // Derivative gain for RPM control
 
 #define CORRECTION_PERIOD_FOR_SPEED_CONTROL   500 //in ms
-#define CORRECTION_PERIOD_FOR_ANGLE_CONTROL   100 //in ms
+#define CORRECTION_PERIOD_FOR_ANGLE_CONTROL   10 //in ms
 
 void setup() {
   
@@ -32,7 +33,17 @@ void setup() {
   StepperSetSpeed(100);
   StepperDisable  (); 
   EncoderInit();
-  delay(100);
+  StepperEnable  ();
+  StepperSetAngle(360, 60);
+  delay(5000);
+
+  while( EncoderGetAngle() > 2 ){
+  Serial.println(EncoderGetAngle());
+  StepperSetAngle(1.8, SET_ANGLE_SPEED);
+  delay(50);
+  }
+  StepperDisable  (); 
+
 }
 
 void loop() {
@@ -57,19 +68,19 @@ void loop() {
       Serial.println("Angle Control Mode");
       if(buttonState == BUTTON_SELECT){
       MoveAngle = fmod((EncoderGetAngle() + GUIGetAngle ()) , 360);}
-      //StepperSetAngle(GUIGetAngle ());
+      //StepperSetAngle(GUIGetAngle (), SET_ANGLE_SPEED);
       /*
       if(RotationDirection == CLOCKWISE)
       {
         if(EncoderGetAngle()<GUIGetAngle ())
         {
-        StepperSetAngle(GUIGetAngle ());
+        StepperSetAngle(GUIGetAngle (), SET_ANGLE_SPEED);
         }
       }
       else {
         if(EncoderGetAngle()>GUIGetAngle ())
         {
-        StepperSetAngle(GUIGetAngle ());
+        StepperSetAngle(GUIGetAngle (), SET_ANGLE_SPEED);
         }
       }
       */
@@ -83,17 +94,24 @@ void loop() {
 
   if(CurrentMode == ANGLE_CONTROL && ( (millis() - UpdateMillis ) > CORRECTION_PERIOD_FOR_ANGLE_CONTROL)  ){
     UpdateMillis = millis();
-    if(abs(MoveAngle  - EncoderGetAngle())>3.6){
-  Serial.print("current angle is :");
-  Serial.print(EncoderGetAngle());
-  Serial.print("  MoveAngle is:");
-  Serial.print(MoveAngle);
-  Serial.print("  Stepper Set Angle is:");
-  Serial.println(abs((MoveAngle  - EncoderGetAngle())/2));
-  StepperSetAngle(abs((MoveAngle  - EncoderGetAngle())/2));
+    if(abs(MoveAngle  - EncoderGetAngle())>STEP_ANGLE * 2 ){
+
+      Serial.print("current angle is :");
+      Serial.println(EncoderGetAngle());
+
+      //Serial.print("EncoderPhaseACounter :");
+      //Serial.print(EncoderGet_EncoderPhaseACounter());
+      //Serial.print(" EncoderPhaseBCounter");
+      //Serial.print(EncoderGet_EncoderPhaseBCounter());
+
+      Serial.print("  MoveAngle is:");
+      Serial.print(MoveAngle);
+      Serial.print("  Stepper Set Angle is:");
+      Serial.println(abs((MoveAngle  - EncoderGetAngle())/2));
+      StepperSetAngle(abs((MoveAngle  - EncoderGetAngle())/2), SET_ANGLE_SPEED);
   }
   else if (abs(MoveAngle  - EncoderGetAngle())>STEP_ANGLE){
-    StepperSetAngle( abs( ( MoveAngle  - EncoderGetAngle() ) ) );
+    StepperSetAngle( abs( ( MoveAngle  - EncoderGetAngle() ) ) , SET_ANGLE_SPEED);
 
   }
 
@@ -112,6 +130,7 @@ void loop() {
    Serial.print("  B:");
    Serial.println(GUIGetRPM () );
    Serial.println();
+
    /*
    if (EncoderGetRPM() >GUIGetRPM () &&(CurrentSpeedFactor > 0.01)){
 

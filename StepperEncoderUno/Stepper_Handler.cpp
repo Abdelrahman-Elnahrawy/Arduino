@@ -39,6 +39,6 @@ void StepperSetSpeed(float speed){
   setFreqPin11(StepsPerSecond);  //the speed is in rpm .. to get the revolution per second = speed / 60 ,,, and to get the amount of steps required
 }
 
-void StepperSetAngle(float angle){
-  FreqGenGeneratePulses((int)((angle * 300) /360), 60);
+void StepperSetAngle(float angle , uint16_t speed){
+  FreqGenGeneratePulses((int)((angle * 300) /360), speed);
 }

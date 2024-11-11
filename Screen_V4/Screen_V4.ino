@@ -20,6 +20,7 @@ void setup() {
   StepperSetSpeed(100);
   StepperDisable  (); 
   delay(100);
+  EncoderInit();
 }
 
 void loop() {
@@ -64,19 +65,23 @@ void loop() {
     }
   }
   
+
   if(CurrentMode == ANGLE_CONTROL && ( (millis() - UpdateMillis ) > CORRECTION_PERIOD_FOR_ANGLE_CONTROL)  ){
     UpdateMillis = millis();
-    if(EncoderGetAngle() < GUIGetAngle ()){
-      StepperSetAngle(EncoderGetAngle() - GUIGetAngle ());
-      }
-    else if(EncoderGetAngle() > GUIGetAngle ()){
-      StepperSetAngle(GUIGetAngle () - EncoderGetAngle());
+    if(EncoderGetAngle() != GUIGetAngle ()){
+      StepperSetAngle(abs(EncoderGetAngle() - GUIGetAngle ()));
       }
     else{}
   }
 
+
   if(CurrentMode == SPEED_CONTROL && ( (millis() - UpdateMillis ) > CORRECTION_PERIOD_FOR_SPEED_CONTROL)  ){
     UpdateMillis = millis();
-    StepperSetSpeed(GUIGetRPM () + ( GUIGetRPM () - EncoderGetRPM())); 
+    //StepperSetSpeed(GUIGetRPM () + ( GUIGetRPM () - EncoderGetRPM())); 
+    StepperSetSpeed(GUIGetRPM () ); 
+     Serial.print("encoder Read Speed:");
+    Serial.println(EncoderGetRPM());
   }
+
 }
+
