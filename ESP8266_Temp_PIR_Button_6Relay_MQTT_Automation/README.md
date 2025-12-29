@@ -1,5 +1,5 @@
-# 🌡️ ESP8266 MQTT Temperature & Home Automation System
-نظام التحكم المنزلي وقياس درجة الحرارة باستخدام ESP8266 و MQTT
+# 🌡️ ESP8266 MQTT Temperature & Home Automation System (Clean Version)
+نظام التحكم المنزلي وقياس درجة الحرارة باستخدام ESP8266 و MQTT (نسخة محسنة)
 
 **Author:** Abdelrahman Elnahrawy  
 **License:** MIT
