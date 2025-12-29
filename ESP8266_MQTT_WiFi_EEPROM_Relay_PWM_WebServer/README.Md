@@ -84,7 +84,7 @@ This project uses an ESP8266 to:
 3. Launch WebServer for configuration in SoftAP mode  
 4. Connect to MQTT broker and subscribe to relay/PWM topics  
 5. Parse incoming MQTT payload to update:  
-   - Relays R0-R11 ON/OFF  
+   - Relays R0-R5 ON/OFF  
    - PWM0-PWM5 values (0-255)  
    - Timers and modes  
 6. Store updated states in EEPROM  
