@@ -7,6 +7,9 @@
 
 #define GEAR_RATIO       1
 #define SET_ANGLE_SPEED  200
+
+
+
 uint8_t CurrentMode;
 uint32_t UpdateMillis;
 float MoveAngle;
@@ -22,6 +25,7 @@ float rpmKp = 0.2;  // Proportional gain for RPM control
 float rpmKi = 0.05; // Integral gain for RPM control
 float rpmKd = 0.32; // Derivative gain for RPM control
 
+
 #define CORRECTION_PERIOD_FOR_SPEED_CONTROL   500 //in ms
 #define CORRECTION_PERIOD_FOR_ANGLE_CONTROL   10 //in ms
 
@@ -29,10 +33,12 @@ void setup() {
   
   Serial.begin(115200);
   DisplaySetup();
-  StepperSetup(13,12);
-  StepperSetSpeed(100);
-  StepperDisable  (); 
   EncoderInit();
+  StepperSetup(13,12);
+  StepperDisable  (); 
+
+
+
   StepperEnable  ();
   StepperSetAngle(360, 60);
   delay(5000);
@@ -123,34 +129,20 @@ void loop() {
 
   if(CurrentMode == SPEED_CONTROL && ( (millis() - UpdateMillis ) > CORRECTION_PERIOD_FOR_SPEED_CONTROL)  ){
     UpdateMillis = millis();
-   Serial.print("A:");
+   Serial.print("Actual speed:");
    Serial.print(EncoderGetRPM());
    //Serial.print(" factor:");
    //Serial.print(CurrentSpeedFactor);
-   Serial.print("  B:");
+   Serial.print("  Set speed:");
    Serial.println(GUIGetRPM () );
    Serial.println();
 
-   /*
-   if (EncoderGetRPM() >GUIGetRPM () &&(CurrentSpeedFactor > 0.01)){
-
-     CurrentSpeedFactor/=1.01;
-   } 
-   else if (EncoderGetRPM() <GUIGetRPM () && (CurrentSpeedFactor < 10)){
-     CurrentSpeedFactor*=1.01;
-   }
-  StepperSetSpeed(GUIGetRPM () * CurrentSpeedFactor); 
-    */
-
-  //StepperSetSpeed(GUIGetRPM () +(GUIGetRPM () - EncoderGetRPM())); 
-
-  // Get Target and Actual RPM
-float rpmError = GUIGetRPM() - EncoderGetRPM(); // Calculate RPM error
-
-// PID Output Calculation
-rpmIntegral += rpmError; // Update integral term with current error
-float rpmDerivative = rpmError - previousRPMError; // Calculate change in error (derivative term)
-float rpmOutput = (rpmKp * rpmError) + (rpmKi * rpmIntegral) + (rpmKd * rpmDerivative);
+    // Get Target and Actual RPM
+    float rpmError = GUIGetRPM() - EncoderGetRPM(); // Calculate RPM error
+    // PID Output Calculation
+    rpmIntegral += rpmError; // Update integral term with current error
+    float rpmDerivative = rpmError - previousRPMError; // Calculate change in error (derivative term)
+    float rpmOutput = (rpmKp * rpmError) + (rpmKi * rpmIntegral) + (rpmKd * rpmDerivative);
 
 // Set the stepper motor speed
 //StepperSetSpeed(EncoderGetRPM() + rpmOutput);

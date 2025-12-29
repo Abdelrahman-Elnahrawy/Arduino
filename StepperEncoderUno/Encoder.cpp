@@ -131,9 +131,7 @@ void EncoderPhaseZ() {
 float EncoderGetRPM() {
   // Calculate RPM based on pulseTicksZ duration
   #define NOSA  (ENCODER_PPR/100)
-  return ((float)1000000 / TICKS_TO_US(pulseTicksB * 15)) * 60; // Frequency (RPS) * 60 = RPM
-
- // return (((float)1000000 / TICKS_TO_US(pulseTicksZ)) + ((float)1000000 / TICKS_TO_US(pulseTicksA* ENCODER_PPR)) + ((float)1000000 / TICKS_TO_US(pulseTicksB* ENCODER_PPR)) ) * 20; // Frequency (RPS) * 60 = RPM
+  return (((float)1000000 / TICKS_TO_US(pulseTicksZ)) + ((float)1000000 / TICKS_TO_US(pulseTicksA * NOSA))  + ((float)1000000 / TICKS_TO_US(pulseTicksB * NOSA)) * 60 ) * 20; // Frequency (RPS) * 60 = RPM
 }
 
 float EncoderGetAngle() {
