@@ -17,7 +17,7 @@ This project uses an ESP8266 to:
 - Connect to WiFi using saved credentials from EEPROM  
 - Fall back to SoftAP mode and web page for WiFi configuration if needed  
 - Communicate with MQTT broker to receive commands and publish statuses  
-- Control 12 relays and 6 PWM channels  
+- Control 6 relays and 6 PWM channels  
 - Persist relay states, PWM values, and configuration in EEPROM  
 - Handle automatic restart on connection failure  
 
@@ -26,7 +26,7 @@ This project uses an ESP8266 to:
 - الاتصال بالواي فاي باستخدام بيانات مخزنة في EEPROM  
 - تشغيل نقطة وصول SoftAP وصفحة ويب لإعداد الواي فاي إذا فشل الاتصال  
 - التواصل مع بروكر MQTT لتلقي الأوامر ونشر الحالات  
-- التحكم في 12 ريليه و 6 مخرجات PWM  
+- التحكم في 6 ريليه و 6 مخرجات PWM  
 - حفظ حالات الريليه، قيم PWM، والإعدادات في EEPROM  
 - إعادة التشغيل تلقائياً عند فشل الاتصال  
 
@@ -84,7 +84,7 @@ This project uses an ESP8266 to:
 3. Launch WebServer for configuration in SoftAP mode  
 4. Connect to MQTT broker and subscribe to relay/PWM topics  
 5. Parse incoming MQTT payload to update:  
-   - Relays R0-R11 ON/OFF  
+   - Relays R0-R5 ON/OFF  
    - PWM0-PWM5 values (0-255)  
    - Timers and modes  
 6. Store updated states in EEPROM  
