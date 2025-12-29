@@ -1,46 +1,4 @@
-/*
 
-Voltaat Learn (http://learn.voltaat.com)
-
-Link for full tutorial:
-
-Tutorial: Building a device to read and graph heart rate using Arduino and ECG Sensor!
-
-The purpose of this sketch is to build a device to read and chart the heart rate using
-
-an Arduino board and an ECG sensor to capture vital signs. We will use a screen
-
-to display the results visually.
-
-Connections from the Arduino to the breadboard:
-
-• Arduino 5V pin → Breadboard positive line
-
-• Arduino GND pin → Breadboard ground line
-
-Connections from the ECG Sensor:
-
-• GND pin of the sensor → Breadboard ground line
-
-• 3.3V pin of the sensor → 3.3V power pin on the Arduino board
-
-• OUTPUT pin of the sensor → Analog pin A0 on the Arduino board
-
-• LO- pin of the sensor → Digital pin 11 on the Arduino board
-
-• LO+ pin of the sensor → Digital pin 10 on the Arduino board
-
-Connections from the OLED display:
-
-• VCC pin → Breadboard 5V line
-
-• GND pin → Breadboard GND line
-
-• SDA pin → Arduino analog pin A4
-
-• SCL pin → Arduino analog pin A5
-
-*/
 
 #include "U8glib.h"
 
