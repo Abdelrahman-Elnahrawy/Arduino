@@ -1,9 +1,4 @@
-/*
-Arduino 2x16 LCD - LCD Scroll
-modified on 18 Feb 2019
-by Saeed Hosseini
-https://electropeak.com/learn/
-*/
+
 #include 
 const int RS = 8;
 const int EN = 9;
