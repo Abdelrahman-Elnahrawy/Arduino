@@ -137,6 +137,3 @@ Notes:
 - Suggested license: MIT
 
 ---
-
-Want me to push this README into the repo (main) now?  
-Say "push" to push to main, "branch" to create a branch, or "skip" to generate the next README without committing.
