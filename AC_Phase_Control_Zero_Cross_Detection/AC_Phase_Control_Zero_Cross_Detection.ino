@@ -1,9 +1,4 @@
 
-/*TRIAC control with potentiometer; author: ELECTRONOOBS 
- * Subscribe: http://www.youtube.com/c/ELECTRONOOBS
- * Tutorial: http://www.ELECTRONOOBS.com/eng_circuitos_tut20.php
- * Thank you
-*/
 int detectado = 0;
 int valor=7200;
 int last_CH1_state = 0;
