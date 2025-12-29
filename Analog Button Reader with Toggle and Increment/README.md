@@ -157,6 +157,3 @@ Notes:
 - Author: Abdelrahman Elnahrawy
 - Recommended license: MIT
 
----
-
-If you want I can push this to main now (same as previous), and then create the README for the next project.
