@@ -143,8 +143,3 @@ Notes:
 - Suggested license: MIT (add LICENSE file if you want permissive usage)
 
 ---
-
-If you'd like, I can:
-- Generate a wiring diagram image (SVG) or a more detailed schematic.
-- Tune the example for 60Hz or for specific TRIAC/opto parts.
-- Produce the next README for the next project folder.
