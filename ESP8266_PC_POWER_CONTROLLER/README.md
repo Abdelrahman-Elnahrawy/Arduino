@@ -1,6 +1,5 @@
 # ⚡ ESP8266 PC Control via MQTT
 
-# Project Title
 
 [![Platform](https://img.shields.io/badge/Platform-ESP8266-03a9f4?style=for-the-badge&logo=espressif&logoColor=white)](https://www.espressif.com/en/products/socs/esp8266)
 [![Framework](https://img.shields.io/badge/Framework-Arduino-00979d?style=for-the-badge&logo=arduino&logoColor=white)](https://www.arduino.cc/)
