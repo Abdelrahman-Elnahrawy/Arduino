@@ -99,6 +99,3 @@ MQTT setup requires IP, username, and password configuration in the code.
 
 ## 📝 License
 This project is licensed under the **MIT License**.  
-هذا المشروع مرخص تحت **رخصة MIT**.  
-See the [LICENSE](LICENSE) file for details.  
-راجع ملف [LICENSE](LICENSE) لمزيد من التفاصيل.
