@@ -27,17 +27,7 @@ This project uses **ESP8266** to control a desktop PC remotely via **MQTT**. �
 ---
 
 ## 🖼️ Block Diagram
-Below is the placeholder for the block diagram of the system:  
-فيما يلي مكان لإضافة مخطط الكتل للنظام:  
-
-[ESP8266] ---[Relay/Opto-Isolator]--- [PC Power & Reset Pins]
----[MQTT over WiFi]--- [MQTT Broker/PC Interface]
-
-yaml
-Copy code
-
-*Replace the ASCII diagram with an actual image of the block diagram.*  
-استبدل الرسم التخطيطي أعلاه بصورة حقيقية لمخطط الكتل.
+./blockdiagram.png
 
 ---
 
