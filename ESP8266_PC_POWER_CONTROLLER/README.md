@@ -1,15 +1,15 @@
 # ⚡ ESP8266 PC Control via MQTT
 
-[![Platform](https://img.shields.io/badge/Platform-ESP8266-blue.svg)](https://www.espressif.com/en/products/socs/esp8266) 
-[![Language](https://img.shields.io/badge/Language-C%2B%2B-green.svg)](https://www.arduino.cc/) 
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![MQTT](https://img.shields.io/badge/MQTT-Supported-orange.svg)](http://mqtt.org/)
-[![Arduino](https://img.shields.io/badge/Platform-Arduino-orange?style=for-the-badge)]
-[![Embedded](https://img.shields.io/badge/Field-Embedded_Systems-green?style=for-the-badge)]
-[![PWM](https://img.shields.io/badge/Feature-PWM-yellow?style=for-the-badge)]
-[![Interrupts](https://img.shields.io/badge/Feature-Interrupts-red?style=for-the-badge)]
-[![Timers](https://img.shields.io/badge/Feature-Timers-purple?style=for-the-badge)]
-[![Author](https://img.shields.io/badge/Author-Abdelrahman--Elnahrawy-orange?style=for-the-badge)]
+![Platform](https://img.shields.io/badge/Platform-ESP8266-blue.svg)(https://www.espressif.com/en/products/socs/esp8266) 
+![Language](https://img.shields.io/badge/Language-C%2B%2B-green.svg)(https://www.arduino.cc/) 
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)(LICENSE)
+![MQTT](https://img.shields.io/badge/MQTT-Supported-orange.svg)(http://mqtt.org/)
+![Arduino](https://img.shields.io/badge/Platform-Arduino-orange?style=for-the-badge)
+![Embedded](https://img.shields.io/badge/Field-Embedded_Systems-green?style=for-the-badge)
+![PWM](https://img.shields.io/badge/Feature-PWM-yellow?style=for-the-badge)]
+![Interrupts](https://img.shields.io/badge/Feature-Interrupts-red?style=for-the-badge)
+![Timers](https://img.shields.io/badge/Feature-Timers-purple?style=for-the-badge)
+![Author](https://img.shields.io/badge/Author-Abdelrahman--Elnahrawy-orange?style=for-the-badge)
 
 ---
 
@@ -27,7 +27,7 @@ This project uses **ESP8266** to control a desktop PC remotely via **MQTT**. �
 ---
 
 ## 🖼️ Block Diagram
-./blockdiagram.png
+![Block Diagram](block_diagram.png)
 
 ---
 
