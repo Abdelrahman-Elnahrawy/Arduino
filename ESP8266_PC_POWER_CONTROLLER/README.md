@@ -1,15 +1,20 @@
 # ⚡ ESP8266 PC Control via MQTT
 
-![Platform](https://img.shields.io/badge/Platform-ESP8266-blue.svg)(https://www.espressif.com/en/products/socs/esp8266) 
-![Language](https://img.shields.io/badge/Language-C%2B%2B-green.svg)(https://www.arduino.cc/) 
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)(LICENSE)
-![MQTT](https://img.shields.io/badge/MQTT-Supported-orange.svg)(http://mqtt.org/)
-![Arduino](https://img.shields.io/badge/Platform-Arduino-orange?style=for-the-badge)
-![Embedded](https://img.shields.io/badge/Field-Embedded_Systems-green?style=for-the-badge)
-![PWM](https://img.shields.io/badge/Feature-PWM-yellow?style=for-the-badge)]
-![Interrupts](https://img.shields.io/badge/Feature-Interrupts-red?style=for-the-badge)
-![Timers](https://img.shields.io/badge/Feature-Timers-purple?style=for-the-badge)
-![Author](https://img.shields.io/badge/Author-Abdelrahman--Elnahrawy-orange?style=for-the-badge)
+# Project Title
+
+[![Platform](https://img.shields.io/badge/Platform-ESP8266-03a9f4?style=for-the-badge&logo=espressif&logoColor=white)](https://www.espressif.com/en/products/socs/esp8266)
+[![Framework](https://img.shields.io/badge/Framework-Arduino-00979d?style=for-the-badge&logo=arduino&logoColor=white)](https://www.arduino.cc/)
+[![Language](https://img.shields.io/badge/Language-C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://www.arduino.cc/)
+[![Protocol](https://img.shields.io/badge/Protocol-MQTT-3C5233?style=for-the-badge&logo=mqtt&logoColor=white)](http://mqtt.org/)
+[![License](https://img.shields.io/badge/License-MIT-ffcc00?style=for-the-badge)](LICENSE)
+[![Author](https://img.shields.io/badge/Author-Abdelrahman_Elnahrawy-e67e22?style=for-the-badge)](https://github.com/your-username)
+
+---
+
+### Features
+![Feature](https://img.shields.io/badge/Feature-PWM-ffeb3b?style=for-the-badge)
+![Feature](https://img.shields.io/badge/Feature-Interrupts-f44336?style=for-the-badge)
+![Feature](https://img.shields.io/badge/Feature-Timers-9c27b0?style=for-the-badge)
 
 ---
 
