@@ -1,308 +1,279 @@
 /**************************************************************
- *Introduction to Embeded systems *****ASU COURSE**************
- * 888888888888888888888---SHEET_2---88888888888888888888888888
- * TO COMBILE THE CODE OR PLAY WITH IT UN COMMENT THE SECTION**
- * NEEDED ************THANK U <3 <<<<>>>>>><<<<<<>>>>>><<<<>>>>
+ * Introduction to Embedded Systems – ASU Course
+ * ------------------- SHEET 2 -------------------
+ *
+ * To compile or test any task:
+ * 👉 Uncomment ONLY the required section
+ *
+ * Author: Abdelrahman Elnahrawy
  *************************************************************/
 
 
- 
+/* ============================================================
+ * SHEET 2 – TASK 1
+ * PWM via 8-bit DIP Switch
+ * ============================================================
+ * Notes:
+ * - For Proteus simulation, connect pull-down resistors
+ *   to DIP switch pins
+ */
 
+/*
+#define LED_PIN 13
+int DIP_PINS[8] = {2,3,4,5,6,7,8,9};
 
- /*************************************************************
- * 888888888888888888888---SHEET_2-1-88888888888888888888888888
- **********************PWM_VIA_DIP_8bit***********************/
-
-
-
-
-
-/*************************************************************
- for proteus simulation u need to connect pull down resistor network 
- on the dips pins to work correctly
-*************************************************************/
-
-
-/*************************************************************
-#define LED  13 
-int   DIP[] = {2,3,4,5,6,7,8,9} ;
-float value   =0;
-float oldvalue=0;
+float pwm_value = 0;
+float old_value = 0;
 
 void setup() {
-    Serial.begin(9600);
-  for(int i=0; i<8 ; i++){
- Serial.print("i as output :  ");
- delay(50);         // to fix proteus stuck
- Serial.println(i+2);
- digitalWrite(DIP[i],LOW);
- pinMode(DIP[i],INPUT);
-  }
-  pinMode(LED,OUTPUT);
-}
-
-void loop() {
-  value = 0;
-for(int x=0; x<8 ;x++){
-  value = value + ((digitalRead(2+x)*pow(2,x)));
-}
-
-if (value != oldvalue){
-  analogWrite(13,value);
- oldvalue = value  ;}
-}
-*************************************************************/
-
-
- /*************************************************************
- * 888888888888888888888---SHEET_2-2-88888888888888888888888888
- ****************blink_using_interrupts _and_timers***********/
-
-
-
-
-  /*************************************************************
- * 888888888888888888888with_intrrupts88888888888888888888888888
- ****************blink_using_interrupts _and_timers***********/
-
-
-  /*************************************************************
-#define LED 13
-#define DOWN 2
-#define UP   3
-
-int x = 0 ;
-void decrease(){
-  x-- ;
-      if (x<0){
-      x=0;
-      }
-      Serial.print("the x value is :  ");
-      Serial.println(x);
-  }
-  void increase(){
-    x++;
-    if (x>10){
-      x=10;
-      }
-      Serial.print("the x value is :  ");
-      Serial.println(x);
-      
-  }
- void setup(){
-  pinMode(13 ,OUTPUT);
-  pinMode(UP  ,INPUT);
-  pinMode(DOWN,INPUT);
-  attachInterrupt(digitalPinToInterrupt(UP   ), increase, RISING) ;
-  attachInterrupt(digitalPinToInterrupt(DOWN),  decrease, RISING) ;
-  Serial.begin(9600); 
- }
- void loop () {
-
-  digitalWrite (LED,HIGH);
-  delay (x*500);
-  digitalWrite (LED,LOW) ;
-  delay (x*500);
- }
-
- ****************blink_using_interrupts _and_timers***********/
-
-
-  /*************************************************************
- * 88888888888888888888without_intrrupts888888888888888888888888
- ****************blink_using_interrupts _and_timers***********/
- 
-/***********************blinktime_control**********************
- 
-#define LED 13
-#define DOWN 2
-#define UP   3
-boolean state ;
-int x = 1 ;
-unsigned long long timer = 0;
-void setup(){
-  pinMode(LED,OUTPUT);
-  pinMode(DOWN,INPUT);
-  pinMode(UP  ,INPUT);
-  digitalWrite(UP  ,LOW);
-  digitalWrite(DOWN,LOW);
-}
-void loop(){
-  if (digitalRead(UP)){
-    delay(50);
-      if (digitalRead(UP)){
-        x++;
-        while(1){
-          if (!digitalRead(UP)){
-            break;}
-          }
-        }
-    if(x>10){x =10 ;}
-  }
-
-    if (digitalRead(DOWN)){
-    delay(50);
-      if (digitalRead(DOWN)){
-        x--;
-        while(1){
-          if (!digitalRead(DOWN)){
-            break;}
-          }
-        }
-    if(x<1){x =1 ;}
-  }
-  
- if(millis()- timer >500*x){
- digitalWrite(LED,HIGH);
- }
- if(millis()- timer >1000*x){
-digitalWrite(LED, LOW);
-timer = millis();
-}
-}
-
-************************blinktime_control**********************/
-
-
- /*************************************************************
- * 888888888888888888888---SHEET_2-3-88888888888888888888888888
- **********************binary_counter*************************/
-
-
- 
- /**********************binary_counter*************************
-int LEDS[]={2,3,4,5,6,7,8,9,10} ;
-unsigned int number ;
- void setup(){
-  for(int i ; i>9 ; i++){
-    pinMode(LEDS[i],OUTPUT);
-    }
- }
- void loop(){
-  number++ ;
-    if(number>255){number = 0;}
-for(int i ; i>9 ; i++){
-  digitalWrite(LEDS[i],number & 1<<i);
- 
- }
-  delay(1000);
- }
- **********************binary_counter*************************/
- /***********************************************************************************************************************************
-    digitalWrite(2,number & 1<<2);   ??/// means   for examble 3 in binary 0000 0011 & 1<<2 = 0000 0011 & 0000 0010 = 0000 0010  which 
-    is two and as the digital write take positve values so it will turn on but if the number doesnt contain the specified digit in the
-    binary the and will return with zero value so the boolean (high or low ) is set to zero example 0001 1000 & 0000 0010 = 0000 0000 
-    so it set the led off
-  ***********************************************************************************************************************************/
-
- /*************************************************************
- * 888888888888888888888---SHEET_2-4-88888888888888888888888888
- ************************analog_play**************************/
-
- 
-/*************************analog_play**************************
- #define LED 13
- int x;
-void switch_button(){
-  x++;
-  if(x>5){
-    x=0;
-  }
- Serial.print("the cycle time in ms became :  ");
-  Serial.println(analogRead(x));
-}
- void setup(){
-  pinMode(LED,OUTPUT);
-  analogReference(DEFAULT);
   Serial.begin(9600);
-  attachInterrupt(digitalPinToInterrupt(2),switch_button,RISING);
- }
- void loop (){
-  
-  interrupts();
-digitalWrite(LED,HIGH);
-delay(analogRead(x)/2);
-digitalWrite(LED,LOW);
-delay(analogRead(x)/2);
- }
-************************analog_play**************************/
 
+  for (int i = 0; i < 8; i++) {
+    pinMode(DIP_PINS[i], INPUT);
+  }
 
-
- /*************************************************************
- * 888888888888888888888---SHEET_2-5-88888888888888888888888888
- ***************************analog_read***********************/
-
- /***************************analog_read***********************
-
- int LEDS[10] {2,3,4,5,6,7,8,9,10,11,12} ;
- void setup(){
-  analogReference(DEFAULT);
-  for(int i; i>10; i++){
-  pinMode(LEDS[i],OUTPUT);
- }
- void loop (){
-   for(int i; i>10; i++){
-  digitalWrite(LEDS[i],HIGH);
-  delay(analogRead(0));
-  digitalWrite(LEDS[i],LOW );
- }
- }
-  ***************************analog_read***********************/
-
-
-
-
- /*************************************************************
- * 888888888888888888888---SHEET_2-6-88888888888888888888888888
- ************************do_it_yourself***********************/
-
-
-
- 
-
- /*************************************************************
- * 888888888888888888888---SHEET_2-7-88888888888888888888888888
- **************************LOMAD_EL_FARA7*********************/
-
-/**************************LOMAD_EL_FARA7**********************
-const int buttonPin = 2;    
-const int ledPin = 13;      
-int ledstate = HIGH;                      
-boolean BLINK = false ;  
-unsigned long blinktime = 0;  
-unsigned long presstime = 0;  
-void setup() {
-  pinMode(buttonPin, INPUT);
-  pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, ledstate);
-  digitalWrite(buttonPin, HIGH);  
+  pinMode(LED_PIN, OUTPUT);
 }
+
 void loop() {
-if (digitalRead(buttonPin)==LOW){
-  presstime = millis () ;
-  while(1){
-    if (digitalRead(buttonPin)== HIGH){break ;}
+  pwm_value = 0;
+
+  for (int i = 0; i < 8; i++) {
+    pwm_value += digitalRead(DIP_PINS[i]) * pow(2, i);
+  }
+
+  if (pwm_value != old_value) {
+    analogWrite(LED_PIN, pwm_value);
+    old_value = pwm_value;
+  }
+}
+*/
+
+
+/* ============================================================
+ * SHEET 2 – TASK 2
+ * Blink LED using Interrupts & Timers
+ * ============================================================
+ * Version 1: WITH Interrupts
+ */
+
+/*
+#define LED_PIN  13
+#define BTN_DOWN 2
+#define BTN_UP   3
+
+int blink_factor = 0;
+
+void decrease() {
+  blink_factor--;
+  if (blink_factor < 0) blink_factor = 0;
+}
+
+void increase() {
+  blink_factor++;
+  if (blink_factor > 10) blink_factor = 10;
+}
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BTN_UP, INPUT);
+  pinMode(BTN_DOWN, INPUT);
+
+  attachInterrupt(digitalPinToInterrupt(BTN_UP), increase, RISING);
+  attachInterrupt(digitalPinToInterrupt(BTN_DOWN), decrease, RISING);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  digitalWrite(LED_PIN, HIGH);
+  delay(blink_factor * 500);
+  digitalWrite(LED_PIN, LOW);
+  delay(blink_factor * 500);
+}
+*/
+
+
+/* ============================================================
+ * SHEET 2 – TASK 2
+ * Version 2: WITHOUT Interrupts
+ * ============================================================
+ */
+
+/*
+#define LED_PIN 13
+#define BTN_DOWN 2
+#define BTN_UP   3
+
+int blink_factor = 1;
+unsigned long timer = 0;
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BTN_UP, INPUT);
+  pinMode(BTN_DOWN, INPUT);
+}
+
+void loop() {
+
+  if (digitalRead(BTN_UP)) {
+    delay(50);
+    if (digitalRead(BTN_UP)) {
+      blink_factor++;
+      if (blink_factor > 10) blink_factor = 10;
+      while (digitalRead(BTN_UP));
     }
-if (millis() - presstime>80){  ////// THIS IF IS TO CHEK THE REBOUNCE EFFECT
-  ledstate = ! ledstate ;
-  digitalWrite(ledPin, ledstate);}
-if (millis() - presstime>5000){ 
-  BLINK  = !BLINK;}
+  }
 
+  if (digitalRead(BTN_DOWN)) {
+    delay(50);
+    if (digitalRead(BTN_DOWN)) {
+      blink_factor--;
+      if (blink_factor < 1) blink_factor = 1;
+      while (digitalRead(BTN_DOWN));
+    }
+  }
+
+  if (millis() - timer > 500 * blink_factor) {
+    digitalWrite(LED_PIN, HIGH);
+  }
+
+  if (millis() - timer > 1000 * blink_factor) {
+    digitalWrite(LED_PIN, LOW);
+    timer = millis();
+  }
+}
+*/
+
+
+/* ============================================================
+ * SHEET 2 – TASK 3
+ * Binary Counter (0 → 255)
+ * ============================================================
+ */
+
+/*
+int LEDS[] = {2,3,4,5,6,7,8,9,10};
+unsigned int counter = 0;
+
+void setup() {
+  for (int i = 0; i < 9; i++) {
+    pinMode(LEDS[i], OUTPUT);
+  }
 }
 
- if (BLINK){
- if (millis() - blinktime > 400 ){ledstate = ! ledstate ;
-    digitalWrite(ledPin, ledstate);
-    blinktime = millis();
- }
+void loop() {
+  counter++;
+  if (counter > 255) counter = 0;
+
+  for (int i = 0; i < 9; i++) {
+    digitalWrite(LEDS[i], counter & (1 << i));
+  }
+
+  delay(1000);
 }
+*/
+
+
+/* ============================================================
+ * SHEET 2 – TASK 4
+ * Analog Play (Interrupt-controlled ADC source)
+ * ============================================================
+ */
+
+/*
+#define LED_PIN 13
+int analog_channel = 0;
+
+void switch_channel() {
+  analog_channel++;
+  if (analog_channel > 5) analog_channel = 0;
 }
-**************************LOMAD_EL_FARA7*********************/
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);
+  Serial.begin(9600);
+  attachInterrupt(digitalPinToInterrupt(2), switch_channel, RISING);
+}
+
+void loop() {
+  digitalWrite(LED_PIN, HIGH);
+  delay(analogRead(analog_channel) / 2);
+  digitalWrite(LED_PIN, LOW);
+  delay(analogRead(analog_channel) / 2);
+}
+*/
 
 
+/* ============================================================
+ * SHEET 2 – TASK 5
+ * Analog Read LED Chaser
+ * ============================================================
+ */
 
-/*########################################################################################################################################################################################
-thank u <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <3 <33 <3 <3 <3 <3 <3 <3 <3 <3 <3
-/########################################################################################################################################################################################*/
+/*
+int LEDS[] = {2,3,4,5,6,7,8,9,10,11,12};
+
+void setup() {
+  for (int i = 0; i < 11; i++) {
+    pinMode(LEDS[i], OUTPUT);
+  }
+}
+
+void loop() {
+  for (int i = 0; i < 11; i++) {
+    digitalWrite(LEDS[i], HIGH);
+    delay(analogRead(A0));
+    digitalWrite(LEDS[i], LOW);
+  }
+}
+*/
+
+
+/* ============================================================
+ * SHEET 2 – TASK 7
+ * LOMAD EL FARA7 😄
+ * Button controlled LED + Blink Mode
+ * ============================================================
+ */
+
+/*
+const int BUTTON_PIN = 2;
+const int LED_PIN    = 13;
+
+bool led_state = HIGH;
+bool blink_mode = false;
+
+unsigned long blink_timer = 0;
+unsigned long press_time  = 0;
+
+void setup() {
+  pinMode(BUTTON_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, led_state);
+}
+
+void loop() {
+
+  if (digitalRead(BUTTON_PIN) == LOW) {
+    press_time = millis();
+
+    while (digitalRead(BUTTON_PIN) == LOW);
+
+    if (millis() - press_time > 80) {
+      led_state = !led_state;
+      digitalWrite(LED_PIN, led_state);
+    }
+
+    if (millis() - press_time > 5000) {
+      blink_mode = !blink_mode;
+    }
+  }
+
+  if (blink_mode && millis() - blink_timer > 400) {
+    led_state = !led_state;
+    digitalWrite(LED_PIN, led_state);
+    blink_timer = millis();
+  }
+}
+*/
