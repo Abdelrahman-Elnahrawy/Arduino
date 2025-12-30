@@ -15,12 +15,13 @@ const char* mqttPassword = "MQTT_PASSWORD";
 const char* mqttTopic = "IR_RAW_DATA_TOPIC";
 
 // IR LED connection pin
-const uint16_t irLedPin = 1;
+const uint16_t irLedPin = 1; // Connect IR LED to GPIO1
 
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
 IRsend irSender(irLedPin);
 
+// Connect to WiFi network
 void connectToWiFi() {
   WiFi.begin(ssid, password);
   
@@ -34,6 +35,7 @@ void connectToWiFi() {
   Serial.println("IP address: " + WiFi.localIP().toString());
 }
 
+// Connect to MQTT broker and subscribe to topic
 void connectToMQTT() {
   mqttClient.setServer(mqttServer, mqttPort);
   mqttClient.setCallback(handleMQTTMessage);
@@ -54,14 +56,15 @@ void connectToMQTT() {
   }
 }
 
+// Callback function to handle incoming MQTT messages
 void handleMQTTMessage(char* topic, byte* payload, unsigned int length) {
   if (strcmp(topic, mqttTopic) == 0) {
     Serial.println("Received IR raw data");
     
     // Transmit the IR raw data
     for (unsigned int i = 0; i < length; i++) {
-      irSender.sendRaw(payload[i], 32, kHz);
-      delay(50); // Adjust delay as needed
+      irSender.sendRaw(payload[i], 32, kHz); // 38kHz typical IR carrier
+      delay(50); // Adjust delay for timing
     }
     
     Serial.println("IR raw data transmitted");
@@ -70,14 +73,14 @@ void handleMQTTMessage(char* topic, byte* payload, unsigned int length) {
 
 void setup() {
   Serial.begin(115200);
-  connectToWiFi();
-  connectToMQTT();
+  connectToWiFi();    // Connect ESP8266 to WiFi
+  connectToMQTT();    // Connect ESP8266 to MQTT broker
 }
 
 void loop() {
   if (!mqttClient.connected()) {
-    connectToMQTT();
+    connectToMQTT(); // Reconnect if disconnected
   }
   
-  mqttClient.loop();
+  mqttClient.loop();  // Process incoming MQTT messages
 }
