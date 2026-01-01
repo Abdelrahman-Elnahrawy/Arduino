@@ -20,30 +20,6 @@ Highlights include:
 - Projects may contain supporting modules split into `.h`/`.cpp` files.
 - Documentation: each project has a README.md with wiring, dependencies, and usage.
 
-Example structure:
-```
-Arduino/
-├─ <project_name>/
-│  ├─ <project_name>.ino        # main sketch (entry point)
-│  ├─ module_a.h / module_a.cpp # optional modules
-│  ├─ module_b.h / module_b.cpp # optional modules
-│  └─ README.md                 # per-project docs
-└─ README.md                    # this file
-```
-
-## Naming and Conventions
-- Folder and primary `.ino` use snake_case.
-- Constants and hardware pins are grouped at the top of files.
-- Non-blocking scheduling via `millis()` where practical.
-- Time-critical I/O handled with interrupts (e.g., PinChangeInterrupt) and hardware timers (Timer1/Timer2).
-- Comments explain intent, assumptions, and hardware notes.
-
-## Key Projects (examples under `complicated/`)
-- `ecg_oled_lcd_bt_monitor`: ECG-like waveform on SH1106 OLED, numeric Pulse/SpO2 on I2C LCD, HC-05 telemetry, MAX30102 sampling.
-- `lcd_pulse_spo2_display_demo`: Minimal LCD-only UI demo for Pulse/SpO2 values with validation.
-- `lcd_keypad_stepper_controller`: LCD Keypad Shield UI for stepper speed/angle control; rotary encoder A/B/Z feedback; Timer2 OC2A step generation.
-- `lcd_keypad_stepper_closed_loop`: Closed-loop stepper control using encoder feedback; counted pulses for angle moves; optional PID for speed.
-- `stepper_encoder_uno_controller`: Stepper + encoder controller with homing-style moves and interactive UI.
 
 ## Libraries / Dependencies
 Install via Arduino Library Manager unless noted:
