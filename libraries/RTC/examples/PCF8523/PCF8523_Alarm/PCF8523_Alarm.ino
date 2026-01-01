@@ -8,9 +8,6 @@ void setup()
     Serial.begin(115200);
     while (!Serial); // wait for serial port to connect. Needed for native USB port only
     RTC.begin();
-
-	//RTC.softReset(); Re
-
     Serial.println();
 
     if(RTC.isConnected() == false)
@@ -19,7 +16,17 @@ void setup()
         while(true);
     }
 
-	Serial.println("*** RTC PCF8523 ***");
+	RTC.setHourMode(CLOCK_H24);
+	RTC.setTime(3,40,40);
+	RTC.startClock();
+
+	RTC.clearAlarm();
+	//setAlarm(uint8_t minutes,uint8_t hours, uint8_t days, uint8_t weekday)
+	RTC.setAlarm(41,3, -1, -1);
+
+	
+
+	Serial.println("*** RTC PCF8523 Alarm Example ***");
 	Serial.print("Is Clock Running : ");
 	if (RTC.isRunning())
 		Serial.println("Yes");
@@ -38,55 +45,23 @@ void setup()
 	else
 		Serial.println("No");
 
-	Serial.print("Is Timer A Enabled : ");
-	if (RTC.isTimerAEnabled())
-		Serial.println("Yes");
-	else
-		Serial.println("No");
-
-	Serial.print("Is Timmer A Triggered : ");
-	if (RTC.isTimerATriggered())
-		Serial.println("Yes");
-	else
-		Serial.println("No");
-
-
-
-
-	Serial.print("Battery Status : ");
-	if (RTC.isBatteryLow())
-	Serial.println("Low");
-	else
-	Serial.println("Good");
- 
-
 }
 
 void loop()
 {
 	if(RTC.isRunning())
 	{	
-		// Serial.print(RTC.getDay());
-		// Serial.print("-");
-		// Serial.print(RTC.getMonth());
-		// Serial.print("-");
-		// Serial.print(RTC.getYear());
-
-		// Serial.print(" ");
-
-		// Serial.print(RTC.getHours());
-		// Serial.print(":");
-		// Serial.print(RTC.getMinutes());
-		// Serial.print(":");
-		// Serial.print(RTC.getSeconds());
-		// Serial.println(" ");
-
 		Serial.print(RTC.getWeekString().substring(0, 3));
 		Serial.print(" ");
 		Serial.print(RTC.getDateString());
 		Serial.print(" ");
 		Serial.print(RTC.getTimeString());
-		Serial.println();
+		Serial.print(" Alarm Triggered? : ");
+
+		if(RTC.isAlarmTriggered())
+			Serial.println("Yes");
+		else
+			Serial.println("No");
 	}
 	delay(1000);
 }

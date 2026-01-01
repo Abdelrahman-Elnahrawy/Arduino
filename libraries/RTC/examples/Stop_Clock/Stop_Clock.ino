@@ -3,15 +3,15 @@
 
 //Uncomment your RTC.
 
-static DS1307 RTC;
+//static DS1307 RTC;
 //static DS3231 RTC;
 //static PCF8563 RTC;
-//static PCF8523 RTC;
+static PCF8523 RTC;
 
 
 void setup()
 {
-	Serial.begin(9600);
+	Serial.begin(115200);
 	while (!Serial); // wait for serial port to connect. Needed for native USB
 
 	RTC.begin();
