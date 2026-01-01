@@ -115,7 +115,7 @@ uint8_t hexValueOf(char val);
  * @param digits the number of FIXED digits
  * @param with0x if 0x should be included at the beginning
  */
-void intToHexString(char* buffer, size_t bufferSize, unsigned int input, int digits, bool with0x);
+void intToHexString(char* buffer, size_t bufferSize, uint32_t input, int digits, bool with0x);
 
 /**
  * Ensure that a float is always positive.

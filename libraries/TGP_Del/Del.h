@@ -1,39 +1,51 @@
 #ifndef Del_h
 #define Del_h
 
-#include "DelBase.h"
+#define DEFAULT_BLINKING_INTERVAL 200
+#define DEFAULT_BRIGHTNESS 100.0
 #include "Arduino.h"
 
-#ifdef ESP_PLATFORM
-
-#define FIRST_CHANNEL 0
-
-#define PWM_MAX_CHANNEL 16
-#define PWM_FREQUENCY 5000 //Fréquence du PWM
-#define PWM_RESOLUTION 8   //Résolution 8 bits; duty cycle de 0 à 255
-#define PWM_MAXIMUM_FACTOR 2.55
-
-#endif
-
+//#ifndef __AVR__
+//typedef std::function<void(float)> SignalUpdater;
+//#else
+typedef void (*SignalUpdater)(float);
+//#endif
 /******************************************************************************
 * Definitions
 ******************************************************************************/
-class Del : public DelBase
+class Del
 {
 public:
-    Del(int address);
-    int getAddress();
+    Del();
+    Del(SignalUpdater updater);
 
-#ifdef ESP_PLATFORM
-    int getChannel();
-#endif
+    void setSignalUpdater(SignalUpdater updater);
+    void refresh();
+
+    void on();
+    void off();
+    
+    void set(bool);
+    bool get();
+
+    void setBlinking(bool);
+    bool getBlinking();
+
+    void setBrightness(float);
+    float getBrightness();
+
+    void setBlinkingInterval(unsigned long);
+    unsigned long getBlinkingInterval();
+
 protected:
-    void changeState(bool, float);
+    virtual void doUpdate(float value);
 
 private:
-    int _address;
-#ifdef ESP_PLATFORM
-    int _channel;
-#endif
+    unsigned long _blinkInterval;
+    bool _value;
+    bool _blinking;
+    float _brightness;
+    SignalUpdater _updater;
 };
 #endif
+

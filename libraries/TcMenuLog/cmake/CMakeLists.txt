@@ -1,4 +1,6 @@
-add_library(TcMenuLog
+cmake_minimum_required(VERSION 3.13)
+
+add_library(TcMenuLog 
         ../src/IoLogging.cpp
         ../src/TextUtilities.cpp
 )
@@ -8,7 +10,7 @@ target_compile_definitions(TcMenuLog
 )
 
 target_include_directories(TcMenuLog PUBLIC
-        ${PROJECT_SOURCE_DIR}/lib/TcMenuLog/src
+        ../src
 )
 
 target_link_libraries(TcMenuLog PUBLIC pico_stdlib pico_sync)

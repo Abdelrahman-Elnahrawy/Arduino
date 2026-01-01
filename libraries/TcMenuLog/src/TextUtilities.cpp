@@ -112,7 +112,7 @@ char hexChar(uint8_t val) {
 }
 
 
-void intToHexString(char* buffer, size_t bufferSize, unsigned int input, int digits, bool with0x) {
+void intToHexString(char* buffer, size_t bufferSize, uint32_t input, int digits, bool with0x) {
     buffer[0] = 0;
     if(with0x) {
         if(bufferSize < (digits + 3)) {

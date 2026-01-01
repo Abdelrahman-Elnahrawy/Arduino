@@ -6,7 +6,7 @@
 #define IOA_PRINT_COMPAT_H
 
 #include <cstdlib>
-#include <TextUtilities.h>
+#include "TextUtilities.h"
 #include <inttypes.h>
 
 /**
@@ -14,9 +14,7 @@
  * @brief Compatibility with the Arduino Print API for mbed boards, should never be included in an Arduino build
  */
 
-#ifdef IOA_USE_ARDUINO
-# error "Print compatibility has been included on Arduino, this will cause problems, please report."
-#endif
+#ifndef IOA_USE_ARDUINO
 
 // These are definitions of the mode in which the integer print can work, either decimal, hex or binary.
 #define DEC 10
@@ -235,5 +233,6 @@ public:
 
 //forward definition of yield() function
 void yield();
+#endif // IOA_USE_ARDUINO
 
 #endif //IOA_PRINT_COMPAT_H
